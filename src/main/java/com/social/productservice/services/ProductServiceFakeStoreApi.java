@@ -1,0 +1,77 @@
+package com.social.productservice.services;
+
+import java.util.List;
+
+import com.social.productservice.dtos.FakeStoreProductDto;
+import com.social.productservice.models.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class ProductServiceFakeStoreApi implements ProductService{
+    // All the below Api's will be call the using the FakeStoreApi.
+    // it is http client which is used to make request to other servers.
+
+    private final RestTemplate restTemplate;
+
+    public ProductServiceFakeStoreApi(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+
+    @Override
+    public Product getProductById(Long productId) {
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
+        );
+
+        FakeStoreProductDto fakeStoreProductDto = fakeStoreProductDtoResponseEntity.getBody();
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return List.of();
+    }
+
+    @Override
+    public Boolean deleteProductById(Long productId) {
+        return null;
+    }
+
+    @Override
+    public Product updateEntireProduct(Product product, Long productId) {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Product product, Long productId) {
+        return null;
+    }
+
+    @Override
+    public Product createNewProduct(Product product) {
+        return null;
+    }
+
+    public Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {
+        if(fakeStoreProductDto == null){
+            return null;
+        }
+
+        Product product = new Product();
+
+        product.setId(fakeStoreProductDto.getId());
+        product.setTitle(fakeStoreProductDto.getTitle());
+        product.setPrice(fakeStoreProductDto.getPrice());
+        product.setDescription(fakeStoreProductDto.getDescription());
+        product.setImageUrl(fakeStoreProductDto.getImage());
+        Category category = new Category();
+        category.setTitle(fakeStoreProductDto.getCategory());
+        product.setCategory(category);
+
+        return product;
+    }
+}

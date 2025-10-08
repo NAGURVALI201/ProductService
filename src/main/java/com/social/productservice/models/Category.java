@@ -1,5 +1,6 @@
-package com.social.productservice.model;
+package com.social.productservice.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
