@@ -1,7 +1,12 @@
 package com.social.productservice;
 
+import com.social.productservice.models.Category;
+import com.social.productservice.models.Product;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class ProductServiceApplication {

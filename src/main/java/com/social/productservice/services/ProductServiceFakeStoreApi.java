@@ -1,5 +1,6 @@
 package com.social.productservice.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.social.productservice.dtos.FakeStoreProductDto;
@@ -33,7 +34,19 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        ResponseEntity<FakeStoreProductDto[]> fakeStoreProductDtoResponse = restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/",FakeStoreProductDto[].class
+        );
+
+        FakeStoreProductDto[] fakeStoreProductDtoArr =  fakeStoreProductDtoResponse.getBody();
+
+        List<Product> results = new ArrayList<>();
+
+        for(FakeStoreProductDto obj: fakeStoreProductDtoArr){
+            results.add(convertFakeStoreProductDtoToProduct(obj));
+        }
+
+        return results;
     }
 
     @Override
