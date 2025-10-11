@@ -3,6 +3,7 @@ package com.social.productservice.controllers;
 
 import com.social.productservice.models.*;
 import com.social.productservice.services.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,20 @@ public class ProductController
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long productId){
-        return productService.getProductById(productId);
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId){
+
+        Product product = null;
+        ResponseEntity<Product> responseEntity = null;
+        try{
+            product = productService.getProductById(productId);
+            responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
+        }
+        catch(RuntimeException e){
+            e.printStackTrace();
+            responseEntity = new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
+        return responseEntity;
     }
 
     @GetMapping("/")
@@ -40,13 +53,10 @@ public class ProductController
     }
 
     @PutMapping("/{id}")
-    public Product updateEntireProduct(@RequestBody Product product,@PathVariable Long productId){
-        return new Product();
-    }
-
-    @PatchMapping("/{id}")
     public Product updateProduct(@RequestBody Product product,@PathVariable Long productId){
         return new Product();
     }
+
+
 
 }

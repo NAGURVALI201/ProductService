@@ -23,11 +23,18 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
     @Override
     public Product getProductById(Long productId) {
+
         ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
         );
 
+
         FakeStoreProductDto fakeStoreProductDto = fakeStoreProductDtoResponseEntity.getBody();
+
+        if(fakeStoreProductDto == null)
+        {
+            throw new RuntimeException("No product found with id: "+productId);
+        }
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
 
     }
@@ -51,11 +58,6 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
     @Override
     public Boolean deleteProductById(Long productId) {
-        return null;
-    }
-
-    @Override
-    public Product updateEntireProduct(Product product, Long productId) {
         return null;
     }
 
