@@ -65,8 +65,31 @@ public class ProductServiceFakeStoreApi implements ProductService{
     }
 
     @Override
-    public Boolean deleteProductById(Long productId) {
-        return null;
+    public String deleteProductById(Long productId) throws ProductNotFoundException,
+            RuntimeException{
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
+        );
+        if(fakeStoreProductDtoResponseEntity.getStatusCode().value()==400){
+            throw new ProductNotFoundException("No product found with id: ",productId);
+        }
+
+        Map<String,Long> uriVariables = new HashMap<>();
+        uriVariables.put("id",productId);
+
+        ResponseEntity<String> result =  restTemplate.exchange(
+                "https://fakestoreapi.com/products/{id}",
+                HttpMethod.DELETE,
+                null,
+                String.class,
+                uriVariables
+        );
+
+        if(result.getStatusCode().value()==400)
+        {
+            throw new RuntimeException("Unable to delete product with id: "+productId);
+        }
+        return "Product with id: "+ productId +" is deleted successfully";
     }
 
     @Override

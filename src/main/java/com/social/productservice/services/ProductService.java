@@ -8,7 +8,7 @@ public interface ProductService {
     Product getProductById(Long productId) throws ProductNotFoundException;
     List<Product> getAllProducts() throws NoProductsFoundException;
     Product createNewProduct(ProductDto productDto) throws ProductNotCreatedException;
-    Boolean deleteProductById(Long productId);
+    String deleteProductById(Long productId) throws ProductNotFoundException,RuntimeException;
     Product updateProduct(ProductDto productDto,Long productId) throws ProductNotFoundException,RuntimeException;
 
 }

@@ -44,8 +44,12 @@ public class ProductController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProductById(@PathVariable("id") Long productId){
-        return new ResponseEntity<>(null);
+    public ResponseEntity<String> deleteProductById(@PathVariable("id") Long productId)
+    throws ProductNotFoundException,RuntimeException
+    {
+        System.out.println(productService.deleteProductById(productId));
+        return new ResponseEntity<>(productService.deleteProductById(productId),
+                HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
