@@ -2,6 +2,7 @@ package com.social.productservice.controllers;
 
 
 import com.social.productservice.dtos.APIExceptionDto;
+import com.social.productservice.dtos.*;
 import com.social.productservice.models.*;
 import com.social.productservice.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,11 @@ public class ProductController
     }
 
     @PostMapping("/")
-    public Product createNewProduct(@RequestBody Product product){
-        return new Product();
+    public ResponseEntity<Product> createNewProduct(@RequestBody ProductDto productDto)
+    throws ProductNotCreatedException
+    {
+        Product response = productService.createNewProduct(productDto);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

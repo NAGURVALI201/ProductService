@@ -3,7 +3,7 @@ package com.social.productservice.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.social.productservice.dtos.FakeStoreProductDto;
+import com.social.productservice.dtos.*;
 import com.social.productservice.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -71,8 +71,19 @@ public class ProductServiceFakeStoreApi implements ProductService{
     }
 
     @Override
-    public Product createNewProduct(Product product) {
-        return null;
+    public Product createNewProduct(ProductDto productDto) throws ProductNotCreatedException {
+
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponse = restTemplate.postForEntity(
+                "https://fakestoreapi.com/products",
+                    productDto,
+                    FakeStoreProductDto.class
+                );
+
+        if(fakeStoreProductDtoResponse.getStatusCode().value() == 400)
+        {
+            throw new ProductNotCreatedException("Unable to create product.");
+        }
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDtoResponse.getBody());
     }
 
     public Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {

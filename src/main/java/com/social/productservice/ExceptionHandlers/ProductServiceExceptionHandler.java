@@ -22,7 +22,7 @@ public class ProductServiceExceptionHandler {
     }
 
     @ExceptionHandler(NoProductsFoundException.class)
-    public ResponseEntity<APIExceptionDto> productNotFoundException(NoProductsFoundException ex){
+    public ResponseEntity<APIExceptionDto> NoproductsFoundException(NoProductsFoundException ex){
         String responseMessage = ex.getMessage() ;
         String resolutionCode = "The Product will be added in sometime";
         APIExceptionDto apiExceptionDto = new APIExceptionDto(
@@ -30,6 +30,17 @@ public class ProductServiceExceptionHandler {
                 resolutionCode
         );
         return new ResponseEntity<>(apiExceptionDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductNotCreatedException.class)
+    public ResponseEntity<APIExceptionDto> ProductNotCreatedException(ProductNotCreatedException ex){
+        String responseMessage = ex.getMessage() ;
+        String resolutionCode = "pass the correct json body.";
+        APIExceptionDto apiExceptionDto = new APIExceptionDto(
+                responseMessage,
+                resolutionCode
+        );
+        return new ResponseEntity<>(apiExceptionDto, HttpStatus.BAD_REQUEST);
     }
 
     /*
