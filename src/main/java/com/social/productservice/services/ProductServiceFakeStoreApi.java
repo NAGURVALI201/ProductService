@@ -8,6 +8,7 @@ import com.social.productservice.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.social.productservice.exceptions.*;
 
 @Service
 public class ProductServiceFakeStoreApi implements ProductService{
@@ -22,7 +23,7 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
 
     @Override
-    public Product getProductById(Long productId) {
+    public Product getProductById(Long productId) throws ProductNotFoundException{
 
         ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
@@ -33,20 +34,23 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
         if(fakeStoreProductDto == null)
         {
-            throw new RuntimeException("No product found with id: "+productId);
+            throw new ProductNotFoundException("No product found with id: ",productId);
         }
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
 
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts() throws NoProductsFoundException {
         ResponseEntity<FakeStoreProductDto[]> fakeStoreProductDtoResponse = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/",FakeStoreProductDto[].class
         );
 
         FakeStoreProductDto[] fakeStoreProductDtoArr =  fakeStoreProductDtoResponse.getBody();
 
+        if(fakeStoreProductDtoArr.length == 0){
+            throw new NoProductsFoundException("No products Found.");
+        }
         List<Product> results = new ArrayList<>();
 
         for(FakeStoreProductDto obj: fakeStoreProductDtoArr){

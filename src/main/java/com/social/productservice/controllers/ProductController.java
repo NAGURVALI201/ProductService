@@ -1,13 +1,13 @@
 package com.social.productservice.controllers;
 
 
+import com.social.productservice.dtos.APIExceptionDto;
 import com.social.productservice.models.*;
 import com.social.productservice.services.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
+import com.social.productservice.exceptions.*;
 import java.util.List;
 
 @RestController
@@ -21,24 +21,16 @@ public class ProductController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId){
-
-        Product product = null;
-        ResponseEntity<Product> responseEntity = null;
-        try{
-            product = productService.getProductById(productId);
-            responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
-        }
-        catch(RuntimeException e){
-            e.printStackTrace();
-            responseEntity = new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-        }
-
-        return responseEntity;
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId)
+    throws ProductNotFoundException
+    {
+        return new ResponseEntity<>(productService.getProductById(productId),HttpStatus.OK);
     }
 
     @GetMapping("/")
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts()
+    throws NoProductsFoundException
+    {
         return productService.getAllProducts();
     }
 
@@ -57,6 +49,18 @@ public class ProductController
         return new Product();
     }
 
-
+    /*
+    * When there is runtime exception this class exception handler will have priority.
+    */
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<APIExceptionDto> runtimeException(RuntimeException ex) {
+        String message = ex.getMessage();
+        String resolution = "please try later!!!";
+        APIExceptionDto apiExceptionDto = new APIExceptionDto(
+                message,
+                resolution
+        );
+        return new ResponseEntity<>(apiExceptionDto,HttpStatus.BAD_GATEWAY);
+    }
 
 }
