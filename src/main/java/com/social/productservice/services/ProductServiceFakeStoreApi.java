@@ -1,10 +1,14 @@
 package com.social.productservice.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.social.productservice.dtos.*;
 import com.social.productservice.models.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -66,8 +70,32 @@ public class ProductServiceFakeStoreApi implements ProductService{
     }
 
     @Override
-    public Product updateProduct(Product product, Long productId) {
-        return null;
+    public Product updateProduct(ProductDto productDto, Long productId) throws ProductNotFoundException,RuntimeException {
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
+        );
+        if(fakeStoreProductDtoResponseEntity.getStatusCode().value()==400){
+            throw new ProductNotFoundException("No product found with id: ",productId);
+        }
+
+        Map<String,Long> uriVariables = new HashMap<>();
+        uriVariables.put("id",productId);
+
+        HttpEntity<ProductDto> requestEntity = new HttpEntity<>(productDto);
+
+        fakeStoreProductDtoResponseEntity = restTemplate.exchange(
+                "https://fakestoreapi.com/products/{id}",
+                HttpMethod.PUT,
+                requestEntity,
+                FakeStoreProductDto.class,
+                uriVariables
+        );
+
+        if(fakeStoreProductDtoResponseEntity.getStatusCode().value()==400){
+            throw new RuntimeException("unable to update the product.");
+        }
+
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDtoResponseEntity.getBody());
     }
 
     @Override
@@ -104,4 +132,6 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
         return product;
     }
+
+
 }

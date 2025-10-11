@@ -49,8 +49,11 @@ public class ProductController
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@RequestBody Product product,@PathVariable Long productId){
-        return new Product();
+    public Product updateProduct(@RequestBody ProductDto productDto,
+                                 @PathVariable("id") Long productId)
+            throws ProductNotFoundException,RuntimeException
+    {
+        return productService.updateProduct(productDto,productId);
     }
 
     /*
