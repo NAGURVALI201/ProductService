@@ -1,6 +1,8 @@
 package com.social.productservice.dtos;
 
 
+import com.social.productservice.models.Category;
+import com.social.productservice.models.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,22 @@ public class ProductDto {
     private String description;
     private CategoryDto category;
     private String image;
+
+    public Product toProduct(){
+        Category category1 = new Category();
+
+        category1.setId(this.category.getId());
+        category1.setTitle(this.category.getTitle());
+
+        Product product = new Product();
+
+        product.setId(this.id);
+        product.setImageUrl(this.image);
+        product.setDescription(this.description);
+        product.setPrice(this.price);
+        product.setTitle(this.title);
+        product.setCategory(category1);
+
+        return product;
+    }
 }

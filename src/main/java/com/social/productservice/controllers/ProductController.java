@@ -18,7 +18,7 @@ public class ProductController
 {
     private final ProductService productService;
 
-    public ProductController(@Qualifier("productServiceFakeStoreApi") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -38,8 +38,7 @@ public class ProductController
 
     @PostMapping("/")
     public ResponseEntity<Product> createNewProduct(@RequestBody ProductDto productDto)
-    throws ProductNotCreatedException
-    {
+            throws ProductNotCreatedException, CategoryNotFoundException {
         Product response = productService.createNewProduct(productDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
