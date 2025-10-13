@@ -94,6 +94,7 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
     @Override
     public Product updateProduct(ProductDto productDto, Long productId) throws ProductNotFoundException,RuntimeException {
+
         ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
         );
@@ -104,7 +105,9 @@ public class ProductServiceFakeStoreApi implements ProductService{
         Map<String,Long> uriVariables = new HashMap<>();
         uriVariables.put("id",productId);
 
-        HttpEntity<ProductDto> requestEntity = new HttpEntity<>(productDto);
+        FakeStoreProductRequestDto fakeStoreProductRequestDto = convertProductDtoToFakeStoreProductRequestDto(productDto);
+
+        HttpEntity<FakeStoreProductRequestDto> requestEntity = new HttpEntity<>(fakeStoreProductRequestDto);
 
         fakeStoreProductDtoResponseEntity = restTemplate.exchange(
                 "https://fakestoreapi.com/products/{id}",
@@ -124,9 +127,11 @@ public class ProductServiceFakeStoreApi implements ProductService{
     @Override
     public Product createNewProduct(ProductDto productDto) throws ProductNotCreatedException {
 
+        FakeStoreProductRequestDto fakeStoreProductRequestDto = convertProductDtoToFakeStoreProductRequestDto(productDto);
+
         ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponse = restTemplate.postForEntity(
                 "https://fakestoreapi.com/products",
-                    productDto,
+                fakeStoreProductRequestDto,
                     FakeStoreProductDto.class
                 );
 
@@ -135,6 +140,17 @@ public class ProductServiceFakeStoreApi implements ProductService{
             throw new ProductNotCreatedException("Unable to create product.");
         }
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDtoResponse.getBody());
+    }
+
+    private FakeStoreProductRequestDto convertProductDtoToFakeStoreProductRequestDto(ProductDto productDto) {
+        return new FakeStoreProductRequestDto(
+                productDto.getId(),
+                productDto.getTitle(),
+                productDto.getPrice(),
+                productDto.getDescription(),
+                productDto.getCategory().getTitle(),
+                productDto.getImage()
+        );
     }
 
     public Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {

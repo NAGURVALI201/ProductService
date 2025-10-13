@@ -1,6 +1,5 @@
 package com.social.productservice.dtos;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class FakeStoreProductRequestDto {
     private Long id;
     private String title;
     private Double price;
     private String description;
-    private CategoryDto category;
+    private String category;
     private String image;
 }

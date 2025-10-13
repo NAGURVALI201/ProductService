@@ -1,6 +1,5 @@
-package com.social.productservice.models;
+package com.social.productservice.dtos;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name= "categories")
-public class Category extends BaseModel{
+public class CategoryDto {
+    private Long id;
     private String title;
 }
