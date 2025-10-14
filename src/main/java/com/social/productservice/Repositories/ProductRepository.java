@@ -3,6 +3,8 @@ package com.social.productservice.Repositories;
 import com.social.productservice.models.Category;
 import com.social.productservice.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,4 +32,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByCategory_Title(String title);
 
     List<Product> findAllByCategory_Id(Long id);
+
+    // This is hql query we will give name of the Entity what every we write in @Entity annotation.
+    @Query("select p from products p where p.id = :id")
+    Optional<Product> findProductById(@Param("id") Long productId);
+
+    // native sql query
+    @Query(value = "select * from products p where p.id = ?1",nativeQuery = true)
+    Optional<Product> findProductUsingId(Long productId);
 }
