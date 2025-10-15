@@ -5,7 +5,6 @@ import com.social.productservice.Repositories.ProductRepository;
 import com.social.productservice.dtos.ProductDto;
 import com.social.productservice.exceptions.CategoryNotFoundException;
 import com.social.productservice.exceptions.NoProductsFoundException;
-import com.social.productservice.exceptions.ProductNotCreatedException;
 import com.social.productservice.exceptions.ProductNotFoundException;
 import com.social.productservice.models.Category;
 import com.social.productservice.models.Product;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SelfProductService implements ProductService{
@@ -109,7 +107,7 @@ public class SelfProductService implements ProductService{
             productFromDB.setPrice(productDto.getPrice());
 
         if(productDto.getImage()!=null)
-            productFromDB.setImageUrl(productDto.getImage());
+            productFromDB.setImg_url(productDto.getImage());
 
         return productRepository.save(productFromDB);
     }

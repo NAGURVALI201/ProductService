@@ -29,7 +29,7 @@ public class ProductDto {
         Product product = new Product();
 
         product.setId(this.id);
-        product.setImageUrl(this.image);
+        product.setImg_url(this.image);
         product.setDescription(this.description);
         product.setPrice(this.price);
         product.setTitle(this.title);

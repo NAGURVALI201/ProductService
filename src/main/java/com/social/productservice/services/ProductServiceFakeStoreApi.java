@@ -159,7 +159,7 @@ public class ProductServiceFakeStoreApi implements ProductService{
         product.setTitle(fakeStoreProductDto.getTitle());
         product.setPrice(fakeStoreProductDto.getPrice());
         product.setDescription(fakeStoreProductDto.getDescription());
-        product.setImageUrl(fakeStoreProductDto.getImage());
+        product.setImg_url(fakeStoreProductDto.getImage());
         Category category = new Category();
         category.setTitle(fakeStoreProductDto.getCategory());
         product.setCategory(category);
