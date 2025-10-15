@@ -10,6 +10,7 @@ import com.social.productservice.exceptions.ProductNotFoundException;
 import com.social.productservice.models.Category;
 import com.social.productservice.models.Product;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,39 +49,80 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product createNewProduct(ProductDto productDto) throws ProductNotCreatedException, CategoryNotFoundException {
-        Product product = productDto.toProduct();
-        Category category = product.getCategory();
+    @Transactional
+    public Product createNewProduct(ProductDto productDto) throws CategoryNotFoundException {
 
-        if(category == null )
+        if(
+                productDto.getCategory() == null || productDto.getCategory().getTitle() == null
+                || productDto.getCategory().getTitle().isBlank()
+        )
         {
             throw new CategoryNotFoundException("Product can't be created without a Category.");
         }
 
-        Optional<Category> categoryDB = categoryRepository.findByTitle(
+        Product product = productDto.toProduct();
+        Category category = product.getCategory();
+
+        Category categoryFromDB = categoryRepository.findByTitle(
                 category.getTitle()
+        ).orElseGet(
+                () -> categoryRepository.save(category)
         );
 
-        if(categoryDB.isEmpty()){
-            category = categoryRepository.save(category);
-        }else{
-            category = categoryDB.get();
+        product.setCategory(categoryFromDB);
+        return productRepository.save(product);
+
+    }
+
+    @Override
+    @Transactional
+    public Product updateProduct(ProductDto productDto, Long productId) throws ProductNotFoundException,
+            CategoryNotFoundException {
+
+        Product productFromDB = productRepository.findById(productId)
+                .orElseThrow(
+                        ()-> new ProductNotFoundException("Product not found with id: ",productId)
+                );
+
+        if(
+                productDto.getCategory() == null || productDto.getCategory().getTitle() == null
+                || productDto.getCategory().getTitle().isBlank()
+
+        ){
+            throw new CategoryNotFoundException("Product can't be updated without a valid category.");
         }
-        product.setCategory(category);
-        product = productRepository.save(product);
 
-        return product;
+        Category category = categoryRepository.findByTitle(productDto.getCategory().getTitle())
+                .orElseThrow(
+                        ()->new CategoryNotFoundException("Invalid Category please provide a correct Catgroy name.")
+                );
+
+        productFromDB.setCategory(category);
+
+        if(productDto.getTitle()!=null)
+            productFromDB.setTitle(productDto.getTitle());
+
+        if(productDto.getDescription()!=null)
+            productFromDB.setDescription(productDto.getDescription());
+
+        if(productDto.getPrice()!=null)
+            productFromDB.setPrice(productDto.getPrice());
+
+        if(productDto.getImage()!=null)
+            productFromDB.setImageUrl(productDto.getImage());
+
+        return productRepository.save(productFromDB);
     }
-
 
 
     @Override
-    public String deleteProductById(Long productId) throws ProductNotFoundException, RuntimeException {
-        return "";
+    public String deleteProductById(Long productId) throws ProductNotFoundException {
+        if(!productRepository.existsById(productId)){
+            throw new ProductNotFoundException("Product not found with id: ",productId);
+        }
+        productRepository.deleteById(productId);
+        return "Product Deleted successfully.";
     }
 
-    @Override
-    public Product updateProduct(ProductDto productDto, Long productId) throws ProductNotFoundException, RuntimeException {
-        return null;
-    }
+
 }

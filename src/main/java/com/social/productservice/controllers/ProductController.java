@@ -47,7 +47,6 @@ public class ProductController
     public ResponseEntity<String> deleteProductById(@PathVariable("id") Long productId)
     throws ProductNotFoundException,RuntimeException
     {
-        System.out.println(productService.deleteProductById(productId));
         return new ResponseEntity<>(productService.deleteProductById(productId),
                 HttpStatus.OK);
     }
@@ -55,8 +54,7 @@ public class ProductController
     @PutMapping("/{id}")
     public Product updateProduct(@RequestBody ProductDto productDto,
                                  @PathVariable("id") Long productId)
-            throws ProductNotFoundException,RuntimeException
-    {
+            throws ProductNotFoundException, RuntimeException, CategoryNotFoundException {
         return productService.updateProduct(productDto,productId);
     }
 

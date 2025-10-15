@@ -13,7 +13,7 @@ public class ProductServiceExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<APIExceptionDto> productNotFoundException(ProductNotFoundException ex){
         String responseMessage = ex.getMessage() +" "+ex.getId();
-        String resolutionCode = "Their are only 20 products with ids 1..20";
+        String resolutionCode = "Pass a correct product id to delete the product.";
         APIExceptionDto apiExceptionDto = new APIExceptionDto(
                 responseMessage,
                 resolutionCode

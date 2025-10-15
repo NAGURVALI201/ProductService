@@ -65,14 +65,8 @@ public class ProductServiceFakeStoreApi implements ProductService{
     }
 
     @Override
-    public String deleteProductById(Long productId) throws ProductNotFoundException,
-            RuntimeException{
-        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
-                "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
-        );
-        if(fakeStoreProductDtoResponseEntity.getStatusCode().value()==400){
-            throw new ProductNotFoundException("No product found with id: ",productId);
-        }
+    public String deleteProductById(Long productId) throws ProductNotFoundException
+            {
 
         Map<String,Long> uriVariables = new HashMap<>();
         uriVariables.put("id",productId);
@@ -87,13 +81,14 @@ public class ProductServiceFakeStoreApi implements ProductService{
 
         if(result.getStatusCode().value()==400)
         {
-            throw new RuntimeException("Unable to delete product with id: "+productId);
+            throw new ProductNotFoundException("Product Not found with id: "+productId);
         }
         return "Product with id: "+ productId +" is deleted successfully";
     }
 
     @Override
-    public Product updateProduct(ProductDto productDto, Long productId) throws ProductNotFoundException,RuntimeException {
+    public Product updateProduct(ProductDto productDto, Long productId) throws ProductNotFoundException,
+            RuntimeException {
 
         ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class
