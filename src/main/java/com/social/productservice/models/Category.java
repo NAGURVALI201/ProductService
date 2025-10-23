@@ -2,6 +2,7 @@ package com.social.productservice.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,6 @@ import java.util.List;
 public class Category extends BaseModel{
     private String title;
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     private List<Product> products;
 }

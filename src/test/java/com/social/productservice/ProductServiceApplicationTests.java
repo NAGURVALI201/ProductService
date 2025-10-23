@@ -69,4 +69,31 @@ class ProductServiceApplicationTests {
         System.out.println(products.get(0).getTitle());
     }
 
+    @Test
+    @Transactional
+    void testEagerFetchTypes(){
+        // If we write @Transactional on the top of function we will get only 1 query
+        // in that we already have the category in product
+
+        // If we don't write @Transactional on the top of function we will get only 2 queries
+        Optional<Product> productOptional = productRepository.findById(3L);
+
+        Optional<Category> categoryOptional = categoryRepository.findById(2L);
+    }
+    @Test
+    @Transactional
+    void testEagerFetchTypes1(){
+        // If we write @Transactional on the top of function we will get only 2 query
+        // products -> categories 1 query
+        // categories -> list<products> 1 query
+        // category is already fetched.
+
+        // If we don't write @Transactional on the top of function
+        // products -> categories 1 query
+        // categories -> list<products> 1 query
+        // categories -> products
+        Optional<Product> productOptional = productRepository.findById(3L);
+
+        Optional<Category> categoryOptional = categoryRepository.findById(2L);
+    }
 }
