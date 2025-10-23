@@ -1,5 +1,7 @@
 package com.social.productservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ public class Product extends BaseModel{
     private Double price;
     private String description;
     private String img_url;
+    @JsonIgnore
     @ManyToOne
     private Category category;
 
