@@ -18,22 +18,29 @@ public class ProductController
 {
     private final ProductService productService;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId)
-    throws ProductNotFoundException
-    {
-        return new ResponseEntity<>(productService.getProductById(productId),HttpStatus.OK);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId)
+//    throws ProductNotFoundException
+//    {
+//        return new ResponseEntity<>(productService.getProductById(productId),HttpStatus.OK);
+//    }
+        @GetMapping("/{id}")
+        public Product getProductById(@PathVariable("id") Long productId)
+                throws ProductNotFoundException
+        {
+            System.out.println("Debug");
+            return productService.getProductById(productId);
+        }
 
     @GetMapping("/")
-    public List<Product> getAllProducts()
+    public ResponseEntity<List<Product>> getAllProducts()
     throws NoProductsFoundException
     {
-        return productService.getAllProducts();
+        return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.OK);
     }
 
     @PostMapping("/")

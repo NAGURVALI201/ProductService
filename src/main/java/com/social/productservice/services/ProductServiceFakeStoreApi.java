@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.social.productservice.dtos.*;
 import com.social.productservice.models.*;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.social.productservice.exceptions.*;
 
 @Service
+@Primary
 public class ProductServiceFakeStoreApi implements ProductService{
     // All the below Api's will be call the using the FakeStoreApi.
     // it is http client which is used to make request to other servers.
