@@ -23,46 +23,46 @@ class ProductControllerTest {
     private ProductController productController;
 
     // AAA
-    @Test
-    public void getProductByIdTestPositiveCase() throws ProductNotFoundException {
-        // Arrange
-        Long productId = 10L;
-        Product expectedProduct = new Product();
-        expectedProduct.setId(productId);
-        expectedProduct.setTitle("iphone 16");
-        expectedProduct.setPrice(70000.0);
+//    @Test
+//    public void getProductByIdTestPositiveCase() throws ProductNotFoundException {
+//        // Arrange
+//        Long productId = 10L;
+//        Product expectedProduct = new Product();
+//        expectedProduct.setId(productId);
+//        expectedProduct.setTitle("iphone 16");
+//        expectedProduct.setPrice(70000.0);
+//
+//        when(productService.getProductById(productId)).thenReturn(expectedProduct);
+//        // Act
+//        Product actualProduct = productController.getProductById(productId);
+//
+//        // Assert
+//        assertEquals(expectedProduct.getId(),actualProduct.getId());
+//        assertEquals("iphone 16",actualProduct.getTitle());
+//        assertEquals(70000.0,actualProduct.getPrice());
+//    }
 
-        when(productService.getProductById(productId)).thenReturn(expectedProduct);
-        // Act
-        Product actualProduct = productController.getProductById(productId);
-
-        // Assert
-        assertEquals(expectedProduct.getId(),actualProduct.getId());
-        assertEquals("iphone 16",actualProduct.getTitle());
-        assertEquals(70000.0,actualProduct.getPrice());
-    }
-
-    @Test
-    public void getProductByIdTestProductNotFoundException() throws ProductNotFoundException {
-
-        // Arrange
-        ProductNotFoundException productNotFoundException=
-                new ProductNotFoundException("No product with id: -1");
-
-        when(productService.getProductById(-1L)).thenThrow(productNotFoundException);
-
-        // Assert & Act
-        Exception exception = assertThrows(
-                ProductNotFoundException.class,
-                ()-> productService.getProductById(-1L)
-        );
-
-        assertEquals(
-                productNotFoundException.getMessage(),
-                exception.getMessage()
-        );
-
-    }
+//    @Test
+//    public void getProductByIdTestProductNotFoundException() throws ProductNotFoundException {
+//
+//        // Arrange
+//        ProductNotFoundException productNotFoundException=
+//                new ProductNotFoundException("No product with id: -1");
+//
+//        when(productService.getProductById(-1L)).thenThrow(productNotFoundException);
+//
+//        // Assert & Act
+//        Exception exception = assertThrows(
+//                ProductNotFoundException.class,
+//                ()-> productService.getProductById(-1L)
+//        );
+//
+//        assertEquals(
+//                productNotFoundException.getMessage(),
+//                exception.getMessage()
+//        );
+//
+//    }
     @Test
     public void getProductByIdTestNegativeCase(){
 

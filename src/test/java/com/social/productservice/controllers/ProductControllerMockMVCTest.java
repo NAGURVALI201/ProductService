@@ -28,7 +28,7 @@ public class ProductControllerMockMVCTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
+    @MockitoBean(name ="selfProductService")
     private ProductService productService;
 
     @Autowired
