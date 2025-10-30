@@ -1,6 +1,7 @@
 package com.social.productservice.controllers;
 
 
+import com.social.productservice.common.AuthCommons;
 import com.social.productservice.dtos.APIExceptionDto;
 import com.social.productservice.dtos.*;
 import com.social.productservice.models.*;
@@ -17,15 +18,25 @@ import java.util.List;
 public class ProductController
 {
     private final ProductService productService;
+    private final AuthCommons authCommons;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService, AuthCommons authCommons) {
         this.productService = productService;
+        this.authCommons = authCommons;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId)
+    public ResponseEntity<Product> getProductById(
+            @PathVariable("id") Long productId,
+            @RequestHeader("token") String token
+    )
     throws ProductNotFoundException
     {
+        UserDto userDto = authCommons.validateToken(token);
+
+        if(userDto == null){
+            throw new UnAuthorizedException("Invalid token provided.");
+        }
         return new ResponseEntity<>(productService.getProductById(productId),HttpStatus.OK);
     }
 //        @GetMapping("/{id}")

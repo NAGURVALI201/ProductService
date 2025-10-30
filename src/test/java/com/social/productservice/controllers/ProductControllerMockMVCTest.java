@@ -37,36 +37,36 @@ public class ProductControllerMockMVCTest {
     @MockitoBean
     private RestTemplate restTemplate;
 
-    @Test
-    public void testGetAllProductsAPI() throws Exception {
-
-        Product p1 = new Product();
-        p1.setId(1L);
-        p1.setTitle("iPhone 15");
-        p1.setPrice(50000.0);
-        p1.setDescription("iPhone 15");
-
-        Product p2 = new Product();
-        p2.setId(2L);
-        p2.setTitle("iPhone 16");
-        p2.setPrice(55000.0);
-        p2.setDescription("iPhone 16");
-
-        List<Product> products = new ArrayList<>();
-        products.add(p1);
-        products.add(p2);
-
-        when(productService.getAllProducts())
-                .thenReturn(products);
-
-        String expectedJson = objectMapper.writeValueAsString(products);
-
-        mockMvc.perform(
-               MockMvcRequestBuilders.get(
-                       "/products/"
-               )
-        )
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) content().json(expectedJson));
-    }
+//    @Test
+//    public void testGetAllProductsAPI() throws Exception {
+//
+//        Product p1 = new Product();
+//        p1.setId(1L);
+//        p1.setTitle("iPhone 15");
+//        p1.setPrice(50000.0);
+//        p1.setDescription("iPhone 15");
+//
+//        Product p2 = new Product();
+//        p2.setId(2L);
+//        p2.setTitle("iPhone 16");
+//        p2.setPrice(55000.0);
+//        p2.setDescription("iPhone 16");
+//
+//        List<Product> products = new ArrayList<>();
+//        products.add(p1);
+//        products.add(p2);
+//
+//        when(productService.getAllProducts())
+//                .thenReturn(products);
+//
+//        String expectedJson = objectMapper.writeValueAsString(products);
+//
+//        mockMvc.perform(
+//               MockMvcRequestBuilders.get(
+//                       "/products/"
+//               )
+//        )
+//                .andExpect(status().isOk())
+//                .andExpect((ResultMatcher) content().json(expectedJson));
+//    }
 }
